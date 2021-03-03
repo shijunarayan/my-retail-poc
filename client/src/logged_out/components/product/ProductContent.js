@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import SelfAligningImage from "../../../shared/components/SelfAligningImage";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
-import { fetchProducts } from "../../../api/productsApi";
+import { fetchActiveProducts } from "../../../api/productsApi";
 
 const styles = theme => ({
   root: { marginTop: theme.spacing(8) },
@@ -31,7 +31,7 @@ function ProductContent(props) {
   const [products, setProducts] = useState([]);
 
   const loadProducts = useCallback(() => {
-    fetchProducts()
+    fetchActiveProducts()
       .then((res) => {
         setProducts(res.data.products);
       })

@@ -2,12 +2,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import ProductContent from "./ProductContent";
 import AddProduct from "./AddProduct";
-import { fetchProducts } from "../../../api/productsApi";
+import { fetchAllProducts } from "../../../api/productsApi";
 
 function Products(props) {
   const {
     selectProducts,
     pushMessageToSnackbar,
+    history,
   } = props;
 
   const [isAddProductPaperOpen, setIsAddProductPaperOpen] = useState(false);
@@ -22,12 +23,18 @@ function Products(props) {
   }, [setIsAddProductPaperOpen]);
 
   const loadProducts = useCallback(() => {
-    fetchProducts()
+    fetchAllProducts()
       .then((res) => {
         setProducts(res.data.products);
       })
-      .catch((err) => console.log(err));
-  }, [setProducts]);
+      .catch((err) => {
+        // if (err.response.status === 401) {
+        //   localStorage.removeItem("authToken");
+        //   history.push("/");
+        // }
+        console.log(err);
+      });
+  }, [setProducts, history]);
 
   useEffect(() => {
     selectProducts();

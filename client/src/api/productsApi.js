@@ -1,14 +1,22 @@
 import axios from "axios";
 
 const config = {
-  header: {
+  headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
   },
 };
 
-export const fetchProducts = () => {
+export const fetchAllProducts = () => {
   return axios.get(
-    "/test",
+    "/api/product/getAllProducts",
+    config
+  );
+}
+
+export const fetchActiveProducts = () => {
+  return axios.get(
+    "/api/product/getActiveProducts",
     config
   );
 }
