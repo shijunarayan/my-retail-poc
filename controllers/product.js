@@ -1,6 +1,5 @@
 const Product = require("../models/Product");
 const htmlEntities = require("html-entities");
-const initialProducts = require("../initial/products.json");
 const axios = require("axios");
 
 const config = {
@@ -16,20 +15,6 @@ const getProductByIDFromExternalSource = (productId) => {
     config
   );
 }
-
-exports.saveInitialProducts = async (req, res, next) => {
-  try {
-    const product = await Product.insertMany(initialProducts);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: product,
-      });
-  } catch (err) {
-    next(err);
-  }
-};
 
 exports.getProductByID = (req, res, next) => {
   const id = req.params.id;

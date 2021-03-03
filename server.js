@@ -2,11 +2,14 @@ require("dotenv").config({ path: "./config.env" });
 const express = require("express");
 const app = express();
 const connectDB = require("./config/db");
+const { seedCountryCodes, seedProductPricing } = require("./initial/seedData");
 const errorHandler = require("./middleware/error");
 const morgan = require('morgan');
 const path = require('path');
 
 connectDB();
+seedCountryCodes();
+seedProductPricing();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

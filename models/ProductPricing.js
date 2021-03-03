@@ -24,6 +24,13 @@ ProductPricingSchema.pre("save", function (next) {
   });
 });
 
+ProductPricingSchema.pre("updateOne", function (next) {
+  var me = this;
+  CurrencyCode.findOne({ "currencyCode.code": me.getUpdate().currencyCode }, (err, code) => {
+    (code ? next() : next(new Error('invalid currency code')));
+  });
+});
+
 const ProductPricing = mongoose.model("ProductPricing", ProductPricingSchema);
 
 module.exports = ProductPricing;

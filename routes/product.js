@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/auth");
 const { getCurrencyCodes, addCurrencyCode, addCurrencyCodes } = require("../controllers/currencyCode");
-const { getProductPricings, saveProductPrice, saveProductPrices } = require("../controllers/productPricing");
+const { getProductPricings, saveProductPrice, saveProductPrices, updateProductPrice } = require("../controllers/productPricing");
 const {
   getAllProducts,
   getProductByID,
-  saveInitialProducts,
-  getActiveProducts
 } = require("../controllers/product");
 
 
@@ -19,10 +17,9 @@ router.route("/addCurrencyCodes").post(addCurrencyCodes);
 router.route("/getProductPricings").get(getProductPricings);
 router.route("/saveProductPrice").post(saveProductPrice);
 router.route("/saveProductPrices").post(saveProductPrices);
+router.route("/updateProductPrice/:id").put(updateProductPrice);
 
 router.route("/getProductByID/:id").get(getProductByID);
-router.route("/saveInitialProducts").get(saveInitialProducts);
-router.route("/getActiveProducts").get(getActiveProducts);
 router.route("/getAllProducts").get(protect, getAllProducts);
 
 module.exports = router;

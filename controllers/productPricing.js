@@ -52,3 +52,21 @@ exports.getProductPricings = (req, res, next) => {
       next(err);
     });
 };
+
+exports.updateProductPrice = (req, res, next) => {
+  const { productId, value, currencyCode } = req.body;
+
+  // Check if productId is provided
+  if (!productId || !value || !currencyCode) {
+    return next(new ErrorResponse("Please provide a product id, value, and currency code", 400));
+  }
+
+  ProductPricing.updateOne({ productId: productId },
+    { value: value, currencyCode: currencyCode })
+    .then(prices => {
+      res.status(200).json({ success: true });
+    })
+    .catch(err => {
+      next(err);
+    });
+};
