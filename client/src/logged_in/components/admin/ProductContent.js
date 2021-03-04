@@ -22,13 +22,25 @@ const styles = theme => ({
 
 function ProductContent(props) {
   const [updatedProducts, setUpdatedProducts] = useState([]);
-  const { openAddProductModal, products, classes } = props;
+  const { openAddProductModal, products, pushMessageToSnackbar, classes } = props;
 
   useEffect(() => {
     if (updatedProducts.length > 0) {
-      bulkUpdateProductPrice(updatedProducts);
+      bulkUpdateProductPrice(updatedProducts)
+        .catch(err => {
+          setUpdatedProducts([]);
+          if (err.response && err.response.data && err.response.data.error) {
+            pushMessageToSnackbar({
+              text: err.response.data.error,
+            });
+          } else {
+            pushMessageToSnackbar({
+              text: 'Request failed: please validate your input',
+            });
+          }
+        });
     }
-  }, [updatedProducts]);
+  }, [updatedProducts, pushMessageToSnackbar]);
 
   return (
     <Paper className={classes.root}>

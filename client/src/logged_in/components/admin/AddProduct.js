@@ -63,7 +63,9 @@ function AddPost(props) {
             text: err.response.data.error,
           });
         } else {
-          console.log(err)
+          pushMessageToSnackbar({
+            text: 'Request failed: please validate your input',
+          });
         }
       });
   }, [products, pushMessageToSnackbar]);

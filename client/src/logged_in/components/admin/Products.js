@@ -26,10 +26,18 @@ function Products(props) {
       .then((res) => {
         setProducts(res.data.products);
       })
-      .catch((err) => {
-        console.log(err.response)
+      .catch(err => {
+        if (err.response && err.response.data && err.response.data.error) {
+          pushMessageToSnackbar({
+            text: err.response.data.error,
+          });
+        } else {
+          pushMessageToSnackbar({
+            text: 'Request failed: please validate your input',
+          });
+        }
       });
-  }, [setProducts]);
+  }, [setProducts, pushMessageToSnackbar]);
 
   useEffect(() => {
     selectProducts();
