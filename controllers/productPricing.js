@@ -1,5 +1,6 @@
 const ErrorResponse = require("../utils/errorResponse");
 const ProductPricing = require("../models/productPricing");
+const DEFAULT_CURRENCY_CODE = 'USD';
 
 exports.saveProductPrice = async (req, res, next) => {
   const { productId, value, currencyCode } = req.body;
@@ -51,6 +52,18 @@ exports.getProductPricings = (req, res, next) => {
     .catch(err => {
       next(err);
     });
+};
+
+exports.getProductPrice = async (product, next) => {
+  try {
+    const productPrice = await ProductPricing.findOne({ productId: product.id }).exec();
+    if (productPrice) {
+      return { "value": productPrice.value, "currency_code": productPrice.currencyCode };
+    }
+    return { "value": 0, "currency_code": DEFAULT_CURRENCY_CODE };
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.updateProductPrice = (req, res, next) => {
