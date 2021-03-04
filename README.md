@@ -18,6 +18,7 @@ My Retail is a full-stack app created as a case study. It is a Proof-of-Concept 
 ### Public View
 ##### Product Screen
 ![Product Screen][product]
+
 [product]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/public_product_view.jpg "Product Screen"
 
 ### Authentication
