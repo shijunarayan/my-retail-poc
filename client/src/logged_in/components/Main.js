@@ -23,7 +23,6 @@ const styles = (theme) => ({
 function Main(props) {
   const { classes } = props;
   const [selectedTab, setSelectedTab] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [pushMessageToSnackbar, setPushMessageToSnackbar] = useState(null);
 
   const selectProducts = useCallback(() => {
@@ -43,7 +42,6 @@ function Main(props) {
     localStorage.getItem("authToken") ? <Fragment>
       <NavBar
         selectedTab={selectedTab}
-        messages={messages}
       />
       <ConsecutiveSnackbarMessages
         getPushMessageFromChild={getPushMessageFromChild}

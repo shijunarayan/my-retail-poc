@@ -215,7 +215,7 @@ function NavBar(props) {
             >
               <Avatar
                 alt="profile picture"
-                src={`${process.env.PUBLIC_URL}/images/logged_in/profilePicture.jpg`}
+                src={`${process.env.PUBLIC_URL}/images/profilePicture.jpg`}
                 className={classNames(classes.accountAvatar)}
               />
               {isWidthUp("sm", width) && (

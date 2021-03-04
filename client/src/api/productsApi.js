@@ -14,9 +14,17 @@ export const fetchAllProducts = () => {
   );
 }
 
-export const fetchActiveProducts = () => {
+export const getProductByID = (productID) => {
   return axios.get(
-    "/api/product/getActiveProducts",
+    `/api/product/getProductByID/${productID}`,
+    config
+  );
+}
+
+export const bulkUpdateProductPrice = (updatedProducts) => {
+  return axios.post(
+    "/api/product/bulkUpdateProductPrice",
+    { updatedProducts: updatedProducts },
     config
   );
 }

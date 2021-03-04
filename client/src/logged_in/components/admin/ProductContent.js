@@ -1,15 +1,14 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   List, Paper, withStyles,
   Divider,
   Toolbar,
-  Typography,
-  Button,
 } from "@material-ui/core";
 import ProductTable from "./ProductTable";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/ShoppingCart';
+import { bulkUpdateProductPrice } from "../../../api/productsApi";
 
 const styles = theme => ({
   root: { marginTop: theme.spacing(9) },
@@ -22,7 +21,14 @@ const styles = theme => ({
 });
 
 function ProductContent(props) {
+  const [updatedProducts, setUpdatedProducts] = useState([]);
   const { openAddProductModal, products, classes } = props;
+
+  useEffect(() => {
+    if (updatedProducts.length > 0) {
+      bulkUpdateProductPrice(updatedProducts);
+    }
+  }, [updatedProducts]);
 
   return (
     <Paper className={classes.root}>
@@ -38,7 +44,7 @@ function ProductContent(props) {
       </Toolbar>
       <Divider />
       <List disablePadding>
-        <ProductTable products={products} />
+        <ProductTable products={products} setUpdatedProducts={setUpdatedProducts} />
       </List>
     </Paper>
   );

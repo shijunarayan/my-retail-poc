@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/auth");
 const { getCurrencyCodes, addCurrencyCode, addCurrencyCodes } = require("../controllers/currencyCode");
-const { getProductPricings, saveProductPrice, saveProductPrices, updateProductPrice } = require("../controllers/productPricing");
+const { saveProductPrice, saveProductPrices, updateProductPrice, bulkUpdateProductPrice } = require("../controllers/productPricing");
 const {
   getAllProducts,
   getProductByID,
@@ -10,24 +10,16 @@ const {
 
 
 router.route("/getCurrencyCodes").get(getCurrencyCodes);
-router.route("/addCurrencyCode").post(addCurrencyCode);
-router.route("/addCurrencyCodes").post(addCurrencyCodes);
+router.route("/addCurrencyCode").post(protect, addCurrencyCode);
+router.route("/addCurrencyCodes").post(protect, addCurrencyCodes);
 
+router.route("/saveProductPrice").post(protect, saveProductPrice);
+router.route("/saveProductPrices").post(protect, saveProductPrices);
+router.route("/updateProductPrice/:id").put(protect, updateProductPrice);
+router.route("/bulkUpdateProductPrice").post(protect, bulkUpdateProductPrice);
 
-router.route("/getProductPricings").get(getProductPricings);
-router.route("/saveProductPrice").post(saveProductPrice);
-router.route("/saveProductPrices").post(saveProductPrices);
-router.route("/updateProductPrice/:id").put(updateProductPrice);
 
 router.route("/getProductByID/:id").get(getProductByID);
-router.route("/getAllProducts").get(protect, getAllProducts);
+router.route("/getAllProducts").get(getAllProducts);
 
 module.exports = router;
-
-
-/*
-https://redsky.target.com/v3/pdp/tcin/13860428?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics&key=candidate
-https://redsky.target.com/v3/pdp/tcin/54456119?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics&key=candidate
-https://redsky.target.com/v3/pdp/tcin/13264003?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics&key=candidate
-https://redsky.target.com/v3/pdp/tcin/12954218?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics&key=candidate
-*/

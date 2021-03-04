@@ -28,11 +28,10 @@ function Products(props) {
         setProducts(res.data.products);
       })
       .catch((err) => {
-        // if (err.response.status === 401) {
-        //   localStorage.removeItem("authToken");
-        //   history.push("/");
-        // }
-        console.log(err);
+        if (err.response.status === 401) {
+          localStorage.removeItem("authToken");
+          history.push("/");
+        }
       });
   }, [setProducts, history]);
 
@@ -44,8 +43,6 @@ function Products(props) {
   if (isAddProductPaperOpen) {
     return <AddProduct
       onClose={closeAddProductModal}
-      setProducts={setProducts}
-      products={products}
       pushMessageToSnackbar={pushMessageToSnackbar}
     />
   }

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   Avatar,
   Button,
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -14,8 +13,6 @@ import {
 } from "@material-ui/core";
 import EnhancedTableHead from "../../../shared/components/EnhancedTableHead";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
-import Fab from '@material-ui/core/Fab';
-import SaveIcon from '@material-ui/icons/Save';
 
 
 const styles = theme => ({
@@ -75,8 +72,26 @@ const rows = [
 const rowsPerPage = 10;
 
 function ProductTable(props) {
-  const { products, classes } = props;
+  const [isModified, setIsModified] = useState(false);
+  const [productPrice, setProductPrice] = useState(new Map());
   const [page, setPage] = useState(0);
+
+  const { products, setUpdatedProducts, isNewProduct, classes } = props;
+
+  const handlePriceChange = useCallback((e) => {
+    setIsModified(true);
+    setProductPrice(productPrice.set(e.target.id, e.target.value))
+  }, [setIsModified, productPrice]);
+
+  const saveChanges = useCallback((e) => {
+    // Update price on each product that changed
+    for (let item of productPrice) {
+      products.find(p => p.id === item[0]).current_price.value = item[1];
+    }
+    let updatedProducts = products.filter(p => productPrice.has(p.id));
+    setUpdatedProducts(updatedProducts);
+    setIsModified(false);
+  }, [setIsModified, setUpdatedProducts, productPrice, products]);
 
   const handleChangePage = useCallback(
     (_, page) => {
@@ -85,14 +100,17 @@ function ProductTable(props) {
     [setPage]
   );
 
-  if (products.length > 0) {
+  if (products && products.length > 0) {
     return (
       <div className={classes.tableWrapper}>
-        <div className={classes.save}>
-          <Button variant="contained" color="primary" disableElevation>
+        {(isModified || isNewProduct) && <div className={classes.save}>
+          <Button variant="contained"
+            onClick={saveChanges}
+            color="primary"
+            disableElevation>
             Save Changes
           </Button>
-        </div>
+        </div>}
         <Table aria-labelledby="tableTitle">
           <EnhancedTableHead rowCount={products.length} rows={rows} />
           <TableBody>
@@ -111,7 +129,10 @@ function ProductTable(props) {
                     {transaction.name}
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    <TextField id={transaction.id.toString()} defaultValue={transaction.current_price.value} label="Current Price" variant="outlined" />
+                    <TextField id={transaction.id.toString()}
+                      defaultValue={transaction.current_price.value}
+                      label="Current Price" variant="outlined"
+                      onChange={handlePriceChange} />
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {transaction.current_price.currency_code}
@@ -153,7 +174,9 @@ function ProductTable(props) {
 }
 
 ProductTable.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.object).isRequired
+  products: PropTypes.arrayOf(PropTypes.object),
+  setUpdatedProducts: PropTypes.func.isRequired,
+  isNewProduct: PropTypes.bool
 };
 
 export default withStyles(styles)(ProductTable);

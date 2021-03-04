@@ -44,14 +44,13 @@ exports.saveProductPrices = async (req, res, next) => {
   }
 };
 
-exports.getProductPricings = (req, res, next) => {
-  ProductPricing.find()
-    .then(prices => {
-      res.status(200).json({ success: true, pricings: prices, });
-    })
-    .catch(err => {
-      next(err);
-    });
+exports.getProductPricings = async (next) => {
+  try {
+    const productPrices = await ProductPricing.find().exec();
+    return productPrices;
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getProductPrice = async (product, next) => {
@@ -69,17 +68,36 @@ exports.getProductPrice = async (product, next) => {
 exports.updateProductPrice = (req, res, next) => {
   const { productId, value, currencyCode } = req.body;
 
-  // Check if productId is provided
-  if (!productId || !value || !currencyCode) {
+  // Check if all inputs are provided
+  if (!(productId && value && currencyCode)) {
     return next(new ErrorResponse("Please provide a product id, value, and currency code", 400));
   }
 
-  ProductPricing.updateOne({ productId: productId },
-    { value: value, currencyCode: currencyCode })
+  ProductPricing.updateOne({ productId: productId }, { value: value, currencyCode: currencyCode })
     .then(prices => {
-      res.status(200).json({ success: true });
+      res.status(204).json({ success: true });
     })
     .catch(err => {
       next(err);
     });
+};
+
+exports.bulkUpdateProductPrice = async (req, res, next) => {
+  try {
+    const { updatedProducts } = req.body;
+
+    // Check if all inputs are provided
+    if (!updatedProducts) {
+      return next(new ErrorResponse("Please provide a list of products to update", 400));
+    }
+
+    for (product of updatedProducts) {
+      const newPrice = { value: product.current_price.value, currencyCode: product.current_price.currency_code }
+      await ProductPricing.updateOne({ productId: product.id }, newPrice);
+    }
+
+    res.status(204).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
 };

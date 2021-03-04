@@ -1,9 +1,7 @@
-import React, { Fragment, useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   IconButton,
-  Button,
-  Box,
   Divider,
   Paper,
   TextField,
@@ -14,6 +12,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ProductTable from "./ProductTable";
+import { getProductByID, bulkUpdateProductPrice } from "../../../api/productsApi";
 
 const styles = theme => ({
   root: {
@@ -32,11 +31,39 @@ const styles = theme => ({
 });
 
 function AddPost(props) {
+  const [updatedProducts, setUpdatedProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [isNewProduct, setIsNewProduct] = useState(false);
+
   const {
-    pushMessageToSnackbar,
     onClose,
-    classes, products,
+    classes,
   } = props;
+
+  const productIDs = useRef();
+
+  const searchProduct = () => {
+    getProductByID(productIDs.current.value)
+      .then(res => {
+        let newProductList = [...products, res.data.product];
+        setProducts(newProductList)
+        if (res.data.product.current_price.value <= 0) {
+          setIsNewProduct(true);
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  useEffect(() => {
+    if (updatedProducts.length > 0) {
+      console.log(`updatedProducts`, updatedProducts);
+      bulkUpdateProductPrice(updatedProducts)
+        .then(res => {
+          console.log(res.status);
+          onClose()
+        });
+    }
+  }, [updatedProducts, onClose]);
 
   return (
     <Paper className={classes.root}>
@@ -44,10 +71,12 @@ function AddPost(props) {
         <TextField
           variant="filled"
           className={classes.input}
-          placeholder="Enter Product ID(s)"
+          inputRef={productIDs}
+          type="number"
+          placeholder="Enter a Product ID"
           inputProps={{ 'aria-label': 'enter product id' }}
         />
-        <IconButton type="submit" className={classes.iconButton} aria-label="search">
+        <IconButton type="button" onClick={searchProduct} className={classes.iconButton} aria-label="search">
           <SearchIcon />
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
@@ -55,7 +84,7 @@ function AddPost(props) {
           <CancelIcon />
         </IconButton>
       </Toolbar>
-      <ProductTable products={products} />
+      <ProductTable products={products} setUpdatedProducts={setUpdatedProducts} isNewProduct={isNewProduct} />
     </Paper>
   );
 }

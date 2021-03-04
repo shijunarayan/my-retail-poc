@@ -1,5 +1,5 @@
 const Product = require("../models/Product");
-const { getProductPrice } = require("../controllers/productPricing");
+const { getProductPrice, getProductPricings } = require("../controllers/productPricing");
 const ErrorResponse = require("../utils/errorResponse");
 const htmlEntities = require("html-entities");
 const axios = require("axios");
@@ -28,7 +28,6 @@ exports.getProductByID = (req, res, next) => {
     })
     .then(async () => {
       const price = await getProductPrice(product, next);
-      console.log('Price', price)
       product.current_price = price;
       res.status(200).json({ success: true, product: product });
     })
@@ -37,36 +36,26 @@ exports.getProductByID = (req, res, next) => {
     });
 };
 
-exports.getActiveProducts = (req, res, next) => {
-  Product.find({ isActive: true })
-    .then(products => {
-      sendProducts(products, 200, res);
-    })
-    .catch(err => {
-      next(err);
-    });
+exports.getAllProducts = async (req, res, next) => {
+  try {
+    let products = [];
+    const productPrices = await getProductPricings(next);
+    for (price of productPrices) {
+      let redskyRes = await getProductByIDFromRedsky(price.productId)
+      let product = formatProduct(redskyRes.data, next)
+      product.current_price = {
+        "value": price.value,
+        "currency_code": price.currencyCode
+      };
+      products.push(product);
+    }
+    res.status(200).json({ success: true, products: products });
+  } catch (err) {
+    next(err);
+  }
 };
-
-exports.getAllProducts = (req, res, next) => {
-  Product.find()
-    .then(products => {
-      sendProducts(products, 200, res);
-    })
-    .catch(err => {
-      next(err);
-    });
-};
-
-const sendProducts = (products, statusCode, res) => {
-  let items = products.map((product) => {
-    return formatProduct(product);
-  });
-
-  res.status(statusCode).json({ success: true, products: items });
-}
 
 const formatProduct = (data, next) => {
-
   if (
     !(data
       && data.product
