@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
   IconButton,
@@ -37,33 +37,46 @@ function AddPost(props) {
 
   const {
     onClose,
+    loadProducts,
     classes,
+    pushMessageToSnackbar,
   } = props;
 
   const productIDs = useRef();
 
-  const searchProduct = () => {
+  const searchProduct = useCallback(() => {
     getProductByID(productIDs.current.value)
       .then(res => {
-        let newProductList = [...products, res.data.product];
+        let newProductList = [...products.filter(p => p.id !== res.data.product.id), res.data.product];
         setProducts(newProductList)
         if (res.data.product.current_price.value <= 0) {
           setIsNewProduct(true);
+        } else {
+          pushMessageToSnackbar({
+            text: 'Found existing product',
+          });
         }
       })
-      .catch(err => console.log(err));
-  }
+      .catch(err => {
+        if (err.response && err.response.data && err.response.data.error) {
+          pushMessageToSnackbar({
+            text: err.response.data.error,
+          });
+        } else {
+          console.log(err)
+        }
+      });
+  }, [products, pushMessageToSnackbar]);
 
   useEffect(() => {
     if (updatedProducts.length > 0) {
-      console.log(`updatedProducts`, updatedProducts);
       bulkUpdateProductPrice(updatedProducts)
         .then(res => {
-          console.log(res.status);
-          onClose()
+          loadProducts();
+          onClose();
         });
     }
-  }, [updatedProducts, onClose]);
+  }, [updatedProducts, onClose, loadProducts]);
 
   return (
     <Paper className={classes.root}>
@@ -92,6 +105,7 @@ function AddPost(props) {
 AddPost.propTypes = {
   pushMessageToSnackbar: PropTypes.func,
   onClose: PropTypes.func,
+  loadProducts: PropTypes.func,
   classes: PropTypes.object.isRequired,
 };
 

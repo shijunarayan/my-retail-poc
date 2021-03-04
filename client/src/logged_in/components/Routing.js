@@ -6,10 +6,10 @@ import Products from './admin/Products';
 import NotFound from '../../shared/components/NotFound';
 
 function Routing(props) {
-  const { selectProducts } = props;
+  const { selectProducts, pushMessageToSnackbar } = props;
   return (
     <Switch>
-      <PrivateRoute exact path="/admin/products" component={Products} selectProducts={selectProducts} />
+      <PrivateRoute exact path="/admin/products" component={Products} selectProducts={selectProducts} pushMessageToSnackbar={pushMessageToSnackbar} />
       <PrivateRoute component={NotFound} />
     </Switch>
   );

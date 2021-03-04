@@ -8,7 +8,6 @@ function Products(props) {
   const {
     selectProducts,
     pushMessageToSnackbar,
-    history,
   } = props;
 
   const [isAddProductPaperOpen, setIsAddProductPaperOpen] = useState(false);
@@ -28,12 +27,9 @@ function Products(props) {
         setProducts(res.data.products);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
-          localStorage.removeItem("authToken");
-          history.push("/");
-        }
+        console.log(err.response)
       });
-  }, [setProducts, history]);
+  }, [setProducts]);
 
   useEffect(() => {
     selectProducts();
@@ -43,6 +39,7 @@ function Products(props) {
   if (isAddProductPaperOpen) {
     return <AddProduct
       onClose={closeAddProductModal}
+      loadProducts={loadProducts}
       pushMessageToSnackbar={pushMessageToSnackbar}
     />
   }
