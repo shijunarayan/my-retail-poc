@@ -14,12 +14,36 @@ My Retail is a full-stack app created as a case study. It is a Proof-of-Concept 
   ```
 
 ## Application Overview
+
+### Public View
+- ![Product Screen][product]
+[product]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/public_product_view.jpg "Product Screen"
+
+### Authentication
 - ![Login Screen][login]
 - ![Register Screen][register]
 - ![Forgot Password Screen][forgotPassword]
+- ![Reset Password Screen][resetPassword]
+- ![Restricted Access][restricted]
+- ![404 Not Found][notFound]
 
-[login]: https://github.com/shijunarayan/my-retail-poc/tree/main/client/src/images/login.png "Login Screen"
+[login]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/login.jpg "Login Screen"
 
-[register]: https://github.com/shijunarayan/my-retail-poc/tree/main/client/src/images/login.png "Register Screen"
+[register]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/register.jpg "Register Screen"
 
-[forgotPassword]: https://github.com/shijunarayan/my-retail-poc/tree/main/client/src/images/login.png "Forgot Password Screen"
+[forgotPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/forgot_passowrd.jpg "Forgot Password Screen"
+
+[resetPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/reset_passowrd.jpg "Reset Password Screen"
+
+[restricted]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/access_restricted.jpg "Restricted Access Screen"
+
+[notFound]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/not_found.jpg "Not Found Screen"
+
+
+### Private View
+- ![Product Edit Screen][productEdit]
+- ![Product Search Screen][productSearch]
+
+[productEdit]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/private_product_view.jpg "Product Edit Screen"
+
+[productSearch]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/search_product.jpg "Product Search Screen"
