@@ -16,24 +16,36 @@ My Retail is a full-stack app created as a case study. It is a Proof-of-Concept 
 ## Application Overview
 
 ### Public View
-- ![Product Screen][product]
+##### Product Screen
+![Product Screen][product]
 [product]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/public_product_view.jpg "Product Screen"
 
 ### Authentication
-- ![Login Screen][login]
-- ![Register Screen][register]
-- ![Forgot Password Screen][forgotPassword]
-- ![Reset Password Screen][resetPassword]
-- ![Restricted Access][restricted]
-- ![404 Not Found][notFound]
+##### Login Screen
+![Login Screen][login]
+
+##### Register Screen
+![Register Screen][register]
+
+##### Forgot Password Screen
+![Forgot Password Screen][forgotPassword]
+
+##### Reset Password Screen
+![Reset Password Screen][resetPassword]
+
+##### Restricted Access
+![Restricted Access][restricted]
+
+##### 404 Not Found
+![404 Not Found][notFound]
 
 [login]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/login.jpg "Login Screen"
 
 [register]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/register.jpg "Register Screen"
 
-[forgotPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/forgot_passowrd.jpg "Forgot Password Screen"
+[forgotPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/forgot_password.jpg "Forgot Password Screen"
 
-[resetPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/reset_passowrd.jpg "Reset Password Screen"
+[resetPassword]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/reset_password.jpg "Reset Password Screen"
 
 [restricted]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/access_restricted.jpg "Restricted Access Screen"
 
@@ -41,8 +53,12 @@ My Retail is a full-stack app created as a case study. It is a Proof-of-Concept 
 
 
 ### Private View
-- ![Product Edit Screen][productEdit]
-- ![Product Search Screen][productSearch]
+
+##### Product Edit Screen
+![Product Edit Screen][productEdit]
+
+##### Product Search Screen
+![Product Search Screen][productSearch]
 
 [productEdit]: https://github.com/shijunarayan/my-retail-poc/blob/main/images/private_product_view.jpg "Product Edit Screen"
 
