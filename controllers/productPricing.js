@@ -1,5 +1,5 @@
 const ErrorResponse = require("../utils/errorResponse");
-const ProductPricing = require("../models/productPricing");
+const ProductPricing = require("../models/ProductPricing");
 const DEFAULT_CURRENCY_CODE = 'USD';
 
 exports.saveProductPrice = async (req, res, next) => {
