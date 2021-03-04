@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const CurrencyCode = require("../models/CurrencyCode");
-const ProductPricing = require("../models/productPricing");
+const ProductPricing = require("../models/ProductPricing");
 const currencyCodes = require('./currencyCodes.json');
 const productPricing = require('./productPricing.json');
 
