@@ -13,6 +13,8 @@ import FormDialog from "../../../shared/components/FormDialog";
 import HighlightedInformation from "../../../shared/components/HighlightedInformation";
 import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
 import VisibilityPasswordTextField from "../../../shared/components/VisibilityPasswordTextField";
+import { signUpUser } from '../../../api/authApi';
+import { withRouter } from 'react-router-dom';
 
 const styles = (theme) => ({
   link: {
@@ -32,11 +34,12 @@ const styles = (theme) => ({
 });
 
 function RegisterDialog(props) {
-  const { setStatus, theme, onClose, openTermsDialog, status, classes } = props;
+  const { setStatus, theme, onClose, openTermsDialog, status, history, classes } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [hasTermsOfServiceError, setHasTermsOfServiceError] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const registerTermsCheckbox = useRef();
+  const registerEmail = useRef();
   const registerPassword = useRef();
   const registerPasswordRepeat = useRef();
 
@@ -51,11 +54,27 @@ function RegisterDialog(props) {
       setStatus("passwordsDontMatch");
       return;
     }
-    setStatus(null);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
+
+    if (registerPassword.current.value.length < 6) {
+      setStatus("passwordTooShort");
+      return;
+    }
+
+    signUpUser(registerEmail.current.value, registerPassword.current.value)
+      .then(res => {
+        setStatus(null);
+        setIsLoading(false);
+        onClose();
+        localStorage.setItem("authToken", res.data.token);
+        history.push('/admin/products');
+      })
+      .catch(err => {
+        if (err.response && err.response.data && err.response.data.error) {
+          setStatus(`Error encountered: ${err.response.data.error}`);
+        } else {
+          setStatus(`Error encountered`);
+        }
+      })
   }, [
     setIsLoading,
     setStatus,
@@ -63,6 +82,8 @@ function RegisterDialog(props) {
     registerPassword,
     registerPasswordRepeat,
     registerTermsCheckbox,
+    history,
+    onClose
   ]);
 
   return (
@@ -86,6 +107,7 @@ function RegisterDialog(props) {
             fullWidth
             error={status === "invalidEmail"}
             label="Email Address"
+            inputRef={registerEmail}
             autoFocus
             autoComplete="off"
             type="email"
@@ -206,16 +228,11 @@ function RegisterDialog(props) {
               service.
             </FormHelperText>
           )}
-          {status === "accountCreated" ? (
+          {status && status.startsWith("Error") &&
             <HighlightedInformation>
-              We have created your account. Please click on the link in the
-              email we have sent to you before logging in.
+              {status}
             </HighlightedInformation>
-          ) : (
-            <HighlightedInformation>
-              Registration is disabled until we go live.
-            </HighlightedInformation>
-          )}
+          }
         </Fragment>
       }
       actions={
@@ -244,4 +261,4 @@ RegisterDialog.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(RegisterDialog);
+export default withRouter(withStyles(styles, { withTheme: true })(RegisterDialog));
