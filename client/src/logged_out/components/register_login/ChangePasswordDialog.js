@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import {
   TextField,
@@ -10,6 +10,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import ButtonCircularProgress from "../../../shared/components/ButtonCircularProgress";
+import { forgotPassword } from '../../../api/authApi';
 
 const styles = (theme) => ({
   dialogContent: {
@@ -25,14 +26,21 @@ const styles = (theme) => ({
 function ChangePassword(props) {
   const { onClose, classes, setLoginStatus } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const loginEmail = useRef();
 
   const sendPasswordEmail = useCallback(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      setLoginStatus("verificationEmailSend");
-      setIsLoading(false);
-      onClose();
-    }, 1500);
+    forgotPassword(loginEmail.current.value)
+      .then(res => {
+        setLoginStatus("verificationEmailSend");
+        setIsLoading(false);
+        onClose();
+      })
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false);
+        onClose();
+      })
   }, [setIsLoading, setLoginStatus, onClose]);
 
   return (
@@ -63,6 +71,7 @@ function ChangePassword(props) {
             label="Email Address"
             autoFocus
             type="email"
+            inputRef={loginEmail}
             autoComplete="off"
           />
         </DialogContent>

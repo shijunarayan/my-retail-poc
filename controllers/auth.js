@@ -18,14 +18,14 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return next(new ErrorResponse("Invalid credentials", 401));
+      return next(new ErrorResponse("invalidEmail", 401));
     }
 
     // Check that password match
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return next(new ErrorResponse("Invalid credentials", 401));
+      return next(new ErrorResponse("invalidPassword", 401));
     }
 
     sendToken(user, 200, res);
@@ -54,10 +54,10 @@ exports.register = async (req, res, next) => {
 exports.forgotPassword = async (req, res, next) => {
   // Send Email to email provided but first check if user exists
   const { email } = req.body;
-
+  console.log(email)
   try {
     const user = await User.findOne({ email });
-
+    console.log(user)
     if (!user) {
       return next(new ErrorResponse("No email could not be sent", 404));
     }
@@ -68,7 +68,7 @@ exports.forgotPassword = async (req, res, next) => {
     await user.save();
 
     // Create reset url to email to provided email
-    const resetUrl = `${apiConfig.apiUrl}passwordreset/${resetToken}`;
+    const resetUrl = `${apiConfig.apiUrl}resetpassword/${resetToken}`;
 
     // HTML Message
     const message = `

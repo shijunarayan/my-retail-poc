@@ -5,11 +5,13 @@ import PropsRoute from "../../shared/components/PropsRoute";
 import Home from "./home/Home";
 import ProductContent from './product/ProductContent';
 import NotFound from '../../shared/components/NotFound';
+import ResetPasswordDialog from './register_login/ResetPasswordDialog';
 
 function Routing(props) {
   const { selectHome, selectProducts } = props;
   return (
     <Switch>
+      <PropsRoute exact path="/resetpassword/:resetToken" component={ResetPasswordDialog} />
       <PropsRoute exact path="/products" component={ProductContent} selectProducts={selectProducts} />
       <PropsRoute exact path="/" component={Home} selectHome={selectHome} />
       <PropsRoute component={NotFound} />

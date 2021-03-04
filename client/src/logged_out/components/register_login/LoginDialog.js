@@ -81,9 +81,6 @@ function LoginDialog(props) {
     } catch (error) {
       setStatus(error.response.data.error);
       setIsLoading(false);
-      setTimeout(() => {
-        setStatus("");
-      }, 5000);
     }
   }, [setIsLoading, loginEmail, loginPassword, history, setStatus]);
 
